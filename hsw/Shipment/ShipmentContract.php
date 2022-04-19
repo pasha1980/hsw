@@ -15,6 +15,10 @@ interface ShipmentContract
 
     public function createBerthing(int $shipId, Request $request): Berthing;
 
+    public function updateBerthing(int $id, Request $request): Berthing;
+
+    public function deleteBerthing(int $id): void;
+
     public function getShip(int $id): Ship;
 
     public function loadShips(Request $request): array;

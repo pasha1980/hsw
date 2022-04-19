@@ -38,6 +38,7 @@ class PortRepository
     public static function normalize(DBPort $dbPort): Port
     {
         $port = new Port();
+        $port->id = $dbPort->id;
         $port->name = $dbPort->name;
         return $port;
     }

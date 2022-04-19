@@ -18,6 +18,7 @@ class BerthingRepository
     public static function normalize(DBBerthing $dbBerthing): Berthing
     {
         $berthing = new Berthing();
+        $berthing->id = $dbBerthing->id;
         $berthing->port = PortRepository::get($dbBerthing->port_id);
         $berthing->start = ($dbBerthing->dateStart instanceof DateTime) ? $dbBerthing->dateStart : new DateTime($dbBerthing->dateStart);;
         $berthing->end = ($dbBerthing->dateEnd instanceof DateTime) ? $dbBerthing->dateEnd : new DateTime($dbBerthing->dateEnd);

@@ -54,4 +54,53 @@ class BerthingFactory
 
         return BerthingRepository::normalize($dbBerthing);
     }
+
+    /**
+     * [
+     *     "pdf" => 1,
+     *     "start" => "YYYY-mm-dd HH:ii:ss",
+     *     "end" => "YYYY-mm-dd HH:ii:ss",
+     *     "cargo" => "string",
+     *     "const" => 1,
+     *     "problems" => "string"
+     * ]
+     * @param int $id
+     * @param array $data
+     * @return Berthing
+     * @throws Exception
+     */
+    public static function update(int $id, array $data): Berthing
+    {
+        $dbBerthing = DBBerthing::query()->find($id);
+
+        foreach ($data as $key => $value) {
+            switch ($key) {
+                case 'pdf':
+                    $dbBerthing->setFile(File::query()->find($value));
+                    break;
+
+                case 'start':
+                case 'end':
+                    $property = 'date' . ucfirst($key);
+                    $dbBerthing->$property = new \DateTime($value);
+                    break;
+
+                default:
+                    $dbBerthing->$key = $value;
+            }
+        }
+
+        try {
+            $dbBerthing->update();
+        } catch (Exception $exception) {
+            throw new UnprocessableEntityHttpException($exception->getMessage());
+        }
+
+        return BerthingRepository::normalize($dbBerthing);
+    }
+
+    public static function delete(int $id): void
+    {
+        DBBerthing::query()->find($id)->delete();
+    }
 }

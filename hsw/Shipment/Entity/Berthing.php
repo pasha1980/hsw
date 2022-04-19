@@ -7,6 +7,8 @@ use DateTime;
 
 class Berthing
 {
+    public int $id;
+
     public Port $port;
 
     public ?DateTime $start;

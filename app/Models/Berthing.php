@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Berthing extends Model
 {
+    use HasFactory;
     protected $table = 'berthing';
 
     public function port(): Relation

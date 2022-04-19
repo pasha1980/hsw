@@ -11,6 +11,7 @@ use App\Models\Ship;
 use Context\Shipment\Factory\BerthingFactory;
 use Context\Shipment\Factory\PortFactory;
 use Context\Shipment\Factory\ShipFactory;
+use Context\Shipment\Repository\BerthingRepository;
 use Context\Shipment\Repository\PortRepository;
 use Tests\TestCase;
 
@@ -21,8 +22,8 @@ class ShipmentFactoryTest extends TestCase
         $ship = Ship::factory()->create();
         $port = Port::factory()->create();
         $data = [
-            'ship' => $ship->getAttribute('id'),
-            'port' => $port->getAttribute('id'),
+            'ship' => $ship->id,
+            'port' => $port->id,
             'cargo' => 'test cargo',
             'const' => 3251
         ];
@@ -77,5 +78,26 @@ class ShipmentFactoryTest extends TestCase
         $dbPort = Port::query()->where('name', $port->name)->first();
         $this->assertModelExists($dbPort);
         $this->assertSame($port->name, 'Test port');
+    }
+
+    public function test_berthing_update()
+    {
+        $berthing = BerthingRepository::normalize(Berthing::factory()->create());
+        $updatedBerthing = BerthingFactory::update($berthing->id, [
+            'cargo' => 'test cargo'
+        ]);
+
+        $this->assertSame($updatedBerthing->cargo, 'test cargo');
+
+        $dbBerthing = Berthing::query()->find($berthing->id);
+        $this->assertSame($dbBerthing->cargo, $updatedBerthing->cargo);
+    }
+
+    public function test_berthing_delete()
+    {
+        $berthing = BerthingRepository::normalize(Berthing::factory()->create());
+        $dbBerthing = Berthing::query()->find($berthing->id);
+        BerthingFactory::delete($berthing->id);
+        $this->assertModelMissing($dbBerthing);
     }
 }

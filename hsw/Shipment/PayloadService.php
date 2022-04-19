@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class PayloadService
 {
-    private const SHIP_REQUEST_DATA_FIELDS = [
+    private const SHIP_CREATE_DATA_FIELDS = [
         'name',
         'imo',
         'residence',
@@ -16,11 +16,11 @@ class PayloadService
         'photo'
     ];
 
-    private const PORT_REQUEST_DATA_FIELDS = [
+    private const PORT_CREATE_DATA_FIELDS = [
         'name'
     ];
 
-    private const BERTHING_REQUEST_DATA_FIELDS = [
+    private const BERTHING_CREATE_DATA_FIELDS = [
         "port",
         "pdf",
         "start",
@@ -30,6 +30,15 @@ class PayloadService
         "problems",
         "isLoad",
         "isShortage"
+    ];
+
+    private const BERTHING_UPDATE_DATA_FIELDS = [
+        "pdf",
+        "start",
+        "end",
+        "cargo",
+        "const",
+        "problems"
     ];
 
     private static function baseNormalization(Request $request, array $fields): array
@@ -43,18 +52,23 @@ class PayloadService
         return $data;
     }
 
-    public static function normalizeShipRequestData(Request $request): array
+    public static function normalizeShipCreateData(Request $request): array
     {
-        return self::baseNormalization($request, self::SHIP_REQUEST_DATA_FIELDS);
+        return self::baseNormalization($request, self::SHIP_CREATE_DATA_FIELDS);
     }
 
-    public static function normalizePortRequestData(Request $request): array
+    public static function normalizePortCreateData(Request $request): array
     {
-        return self::baseNormalization($request, self::PORT_REQUEST_DATA_FIELDS);
+        return self::baseNormalization($request, self::PORT_CREATE_DATA_FIELDS);
     }
 
-    public static function normalizeBerthingRequestData(Request $request): array
+    public static function normalizeBerthingCreateData(Request $request): array
     {
-        return self::baseNormalization($request, self::BERTHING_REQUEST_DATA_FIELDS);
+        return self::baseNormalization($request, self::BERTHING_CREATE_DATA_FIELDS);
+    }
+
+    public static function normalizeBerthingUpdateData(Request $request): array
+    {
+        return self::baseNormalization($request, self::BERTHING_UPDATE_DATA_FIELDS);
     }
 }

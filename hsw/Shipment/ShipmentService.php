@@ -7,6 +7,7 @@ namespace Context\Shipment;
 use Context\Shipment\Entity\Berthing;
 use Context\Shipment\Entity\Port;
 use Context\Shipment\Entity\Ship;
+use Context\Shipment\Factory\BerthingFactory;
 use Context\Shipment\Factory\PortFactory;
 use Context\Shipment\Factory\ShipFactory;
 use Context\Shipment\Repository\PortRepository;
@@ -17,21 +18,32 @@ class ShipmentService implements ShipmentContract
 {
     public function createShip(Request $request): Ship
     {
-        $shipData = PayloadService::normalizeShipRequestData($request);
+        $shipData = PayloadService::normalizeShipCreateData($request);
         return ShipFactory::create($shipData);
     }
 
     public function createPort(Request $request): Port
     {
-        $portData = PayloadService::normalizePortRequestData($request);
+        $portData = PayloadService::normalizePortCreateData($request);
         return PortFactory::create($portData);
     }
 
     public function createBerthing(int $shipId, Request $request): Berthing
     {
         $ship = ShipRepository::get($shipId);
-        $berthData = PayloadService::normalizeBerthingRequestData($request);
+        $berthData = PayloadService::normalizeBerthingCreateData($request);
         return $ship->berth($berthData);
+    }
+
+    public function updateBerthing(int $id, Request $request): Berthing
+    {
+        $berthData = PayloadService::normalizeBerthingUpdateData($request);
+        return BerthingFactory::update($id, $berthData);
+    }
+
+    public function deleteBerthing(int $id): void
+    {
+        BerthingFactory::delete($id);
     }
 
     public function getShip(int $id): Ship
