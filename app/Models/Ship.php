@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Filters\ShipFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class Ship extends Model
 {
@@ -28,5 +31,10 @@ class Ship extends Model
     public function berthing(): Relation
     {
         return $this->hasMany(Berthing::class);
+    }
+
+    public function scopeFilter(Builder $builder, Request $request)
+    {
+        return (new ShipFilter($request))->filter($builder);
     }
 }

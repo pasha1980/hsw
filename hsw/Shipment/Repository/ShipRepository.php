@@ -7,12 +7,33 @@ namespace Context\Shipment\Repository;
 use App\Models\Ship as DBShip;
 use App\Models\Berthing as DBBerthing;
 use Context\Shipment\Entity\Ship;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 
 class ShipRepository
 {
-    public static function get(int $id): Ship
+    public static function get(?int $id): ?Ship
     {
-        return self::normalize(DBShip::query()->find($id));
+        if ($id !== null) {
+            return self::normalize(DBShip::query()->find($id));
+        }
+        return null;
+    }
+
+    /**
+     * @param Request $request
+     * @return Ship[]
+     */
+    public static function load(Request $request): array
+    {
+        /** @var Collection $collection */
+        $collection = DBShip::filter($request)->get();
+        return $collection
+            ->map(function (DBShip $ship) {
+                return self::normalize($ship);
+            })
+            ->toArray()
+        ;
     }
 
     public static function normalize(DBShip $dbShip): Ship

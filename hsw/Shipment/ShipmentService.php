@@ -6,44 +6,43 @@ namespace Context\Shipment;
 
 use Context\Shipment\Entity\Port;
 use Context\Shipment\Entity\Ship;
-use Illuminate\Http\Request;
-use Context\Shipment\Repository\ShipRepository;
+use Context\Shipment\Factory\PortFactory;
 use Context\Shipment\Factory\ShipFactory;
+use Context\Shipment\Repository\PortRepository;
+use Context\Shipment\Repository\ShipRepository;
+use Illuminate\Http\Request;
 
 class ShipmentService implements ShipmentContract
 {
-    public function __construct(
-        private ShipFactory $factory,
-        private ShipRepository $repository
-    ){}
-
     public function createShip(Request $request): Ship
     {
-        $this->factory->
+        return ShipFactory::create([]); // todo
     }
 
     public function createPort(Request $request): Port
     {
-        // TODO: Implement createPort() method.
+        return PortFactory::create([]); // todo
     }
 
     public function createBerthing(int $shipId, Request $request): Ship
     {
-        // TODO: Implement createBerthing() method.
+        $ship = ShipRepository::get($shipId);
+        $ship->berth([]); // todo
+        return $ship;
     }
 
     public function getShip(int $id): Ship
     {
-        // TODO: Implement getShip() method.
+        return ShipRepository::get($id);
     }
 
     public function loadShips(Request $request): array
     {
-        // TODO: Implement loadShips() method.
+        return ShipRepository::load($request);
     }
 
     public function loadPorts(Request $request): array
     {
-        // TODO: Implement loadPorts() method.
+        return PortRepository::load($request);
     }
 }
