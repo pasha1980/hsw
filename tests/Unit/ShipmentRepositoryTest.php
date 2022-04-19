@@ -4,8 +4,9 @@
 namespace Tests\Unit;
 
 
-use App\Models\Port;
+use App\Models\Port as DBPort;
 use App\Models\Ship;
+use Context\Shipment\Entity\Port;
 use Context\Shipment\Repository\PortRepository;
 use Context\Shipment\Repository\ShipRepository;
 use Illuminate\Http\Request;
@@ -15,13 +16,16 @@ class ShipmentRepositoryTest extends TestCase
 {
     public function test_port_repository()
     {
-        $dbPort = Port::factory()->create();
+        $dbPort = DBPort::factory()->create();
         $port = PortRepository::get($dbPort->id);
         $this->assertSame($dbPort->name, $port->name);
 
         $request = new Request();
         $ports = PortRepository::load($request);
         $this->assertTrue(is_array($ports));
+        foreach ($ports as $port) {
+            $this->assertTrue(get_class($port) === Port::class);
+        }
     }
 
     public function test_ship_repository()
@@ -32,7 +36,7 @@ class ShipmentRepositoryTest extends TestCase
         $this->assertSame($dbShip->imo, $ship->imo);
         $this->assertSame($dbShip->residence, $ship->residence);
 
-        $residenceDbPort = Port::query()->find($dbShip->residence_port);
+        $residenceDbPort = DBPort::query()->find($dbShip->residence_port);
         $this->assertSame($residenceDbPort->name, $ship->residencePort->name);
 
         for ($i = 0; $i < 10; $i++) {

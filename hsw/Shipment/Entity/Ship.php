@@ -3,6 +3,7 @@
 namespace Context\Shipment\Entity;
 
 
+use Context\Shipment\Factory\BerthingFactory;
 use Context\Shipment\Factory\ShipFactory;
 
 class Ship
@@ -27,7 +28,7 @@ class Ship
     public function berth(array $data): Berthing
     {
         $data['ship'] = $this->id;
-        return ShipFactory::createBerthing($data);
+        return BerthingFactory::create($data);
     }
 
     public function lastBerthing(): Berthing

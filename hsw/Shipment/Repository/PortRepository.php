@@ -19,6 +19,10 @@ class PortRepository
         return null;
     }
 
+    /**
+     * @param Request $request
+     * @return Port[]
+     */
     public static function load(Request $request): array
     {
         /** @var Collection $collection */
